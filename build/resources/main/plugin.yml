@@ -1,0 +1,17 @@
+name: KyberPractise
+version: '1.0-SNAPSHOT'
+main: dragon.me.kyberPractise.KyberPractise
+api-version: '1.21'
+
+prefix: "KyberPractice"
+softdepend:
+  - WorldEdit
+  - FastAsyncWorldEdit
+commands:
+  duel:
+    description: "Send/accepts/declines a duel request..."
+
+  kpractise:
+    description: "Allows you to manage arenas/kits etc.. for duels."
+    aliases:
+      - kyberpractise

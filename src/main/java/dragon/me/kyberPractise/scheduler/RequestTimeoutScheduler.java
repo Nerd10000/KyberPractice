@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.scheduler;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.managers.InviteManager;
 import dragon.me.kyberPractise.managers.objects.Invite;
 import org.bukkit.Bukkit;
@@ -11,7 +11,7 @@ public final class RequestTimeoutScheduler {
     private RequestTimeoutScheduler() {}
 
     public static void startScheduler() {
-        Bukkit.getScheduler().runTaskTimer(KyberPractise.instance, () -> {
+        Bukkit.getScheduler().runTaskTimer(KyberPractice.instance, () -> {
 
             // Loop through active invites, not players
             for (Invite invite : InviteManager.getAllInvites().values()) {

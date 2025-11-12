@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.managers;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.managers.objects.Session;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public final class GameSessionManager {
     }
 
     public static String getRandomMap() {
-        List<String> availableArenas = KyberPractise.arenaDataManager.getArenas().stream()
+        List<String> availableArenas = KyberPractice.arenaDataManager.getArenas().stream()
                 .map(arena -> arena.getName())
                 .filter(name -> gameSessions.stream().noneMatch(session -> session.getMap().equals(name)))
                 .collect(Collectors.toList());

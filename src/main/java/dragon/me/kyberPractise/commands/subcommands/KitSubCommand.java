@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.commands.subcommands;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.storage.Kit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -19,11 +19,11 @@ public final class KitSubCommand {
 
         Kit kit = new Kit(name, armorContents, contents, offhand);
         System.out.println("Saving kit: " + name);
-        KyberPractise.kitDataManager.saveData(kit);
+        KyberPractice.kitDataManager.saveData(kit);
     }
 
     public static void loadKit(Player player, String name) {
-        Optional<Kit> kitOptional = KyberPractise.kitDataManager.getKits().stream()
+        Optional<Kit> kitOptional = KyberPractice.kitDataManager.getKits().stream()
                 .filter(it -> it.getName().equalsIgnoreCase(name))
                 .findFirst();
 

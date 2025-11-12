@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.storage;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,10 +18,10 @@ public class KitDataManager {
     private YamlConfiguration config;
 
     public KitDataManager() {
-        file = new File(KyberPractise.instance.getDataFolder(), "kits.yml");
+        file = new File(KyberPractice.instance.getDataFolder(), "kits.yml");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            KyberPractise.instance.saveResource("kits.yml", false);
+            KyberPractice.instance.saveResource("kits.yml", false);
         }
         loadData();
     }
@@ -63,7 +63,7 @@ public class KitDataManager {
         try {
             config.save(file);
         } catch (IOException ex) {
-            KyberPractise.instance.getLogger().severe("Failed to save kits.yml: " + ex.getMessage());
+            KyberPractice.instance.getLogger().severe("Failed to save kits.yml: " + ex.getMessage());
         }
         loadData();
     }

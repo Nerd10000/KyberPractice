@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.storage;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,10 +20,10 @@ public class ArenaDataManager {
     private static final List<String> availableArenas = new ArrayList<>();
 
     public ArenaDataManager() {
-        file = new File(KyberPractise.instance.getDataFolder(), "arenas.yml");
+        file = new File(KyberPractice.instance.getDataFolder(), "arenas.yml");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            KyberPractise.instance.saveResource("arenas.yml", false);
+            KyberPractice.instance.saveResource("arenas.yml", false);
         }
         config = YamlConfiguration.loadConfiguration(file);
     }
@@ -106,7 +106,7 @@ public class ArenaDataManager {
         try {
             config.save(file);
         } catch (IOException ex) {
-            KyberPractise.instance.getLogger().severe("Failed to save arenas.yml: " + ex.getMessage());
+            KyberPractice.instance.getLogger().severe("Failed to save arenas.yml: " + ex.getMessage());
         }
         YamlConfiguration loaded = YamlConfiguration.loadConfiguration(file);
         ((YamlConfiguration) config).setDefaults(loaded);

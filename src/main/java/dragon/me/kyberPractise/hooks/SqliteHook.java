@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.hooks;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 
 import java.io.File;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class SqliteHook {
-    private static final File file = new File(KyberPractise.instance.getDataFolder(), "data.db");
+    private static final File file = new File(KyberPractice.instance.getDataFolder(), "data.db");
     private static Connection connection;
 
     private static final String kitsQuery =
@@ -40,9 +40,9 @@ public final class SqliteHook {
                 statement.execute(kitsQuery);
                 statement.execute(statsQuery);
             }
-            KyberPractise.instance.getLogger().info("✅ Database initialized successfully!");
+            KyberPractice.instance.getLogger().info("✅ Database initialized successfully!");
         } catch (Exception ex) {
-            KyberPractise.instance.getLogger().severe("❌ Database connection failed: " + ex.getMessage());
+            KyberPractice.instance.getLogger().severe("❌ Database connection failed: " + ex.getMessage());
         }
     }
 

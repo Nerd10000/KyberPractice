@@ -13,5 +13,6 @@ public class DuelWinListener implements Listener {
         SqliteHook.incrementWins(event.getPlayer().getUniqueId().toString(), event.getKit());
         event.getPlayer().sendTitle("§6§lYOU'VE WON", "", 0, 100, 0);
         event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_GOAT_HORN_SOUND_1, 1f, 1f);
+
     }
 }

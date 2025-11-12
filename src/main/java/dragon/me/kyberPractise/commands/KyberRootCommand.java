@@ -1,11 +1,16 @@
 package dragon.me.kyberPractise.commands;
 
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.commands.subcommands.ArenaSubCommand;
 import dragon.me.kyberPractise.commands.subcommands.KitSubCommand;
+import dragon.me.kyberPractise.hooks.WorldEditHook;
+import dragon.me.kyberPractise.storage.Arena;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 public class KyberRootCommand implements CommandExecutor {
 
@@ -58,9 +63,37 @@ public class KyberRootCommand implements CommandExecutor {
                         case "teleport":
                             if (args.length > 2) ArenaSubCommand.teleport(player, args[2]);
                             break;
-                        case "savearena":
-                            // ArenaSubCommand.saveArena(player, args[2]);
+
+                        case "restorearena":
+                            Optional<Arena> arena2 = KyberPractice.arenaDataManager.getArenas().stream()
+                                    .filter(arena3 -> arena3.getName().equals(args[2]))
+                                    .findFirst();
+                            if (arena2.isPresent()) {
+                                KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' couldn't be restored.");
+                                ArenaSubCommand.restoreArena(arena2.get(),player);
+                            }else {
+                                player.sendMessage("§bDuels §8» §cCouldn't restore the arena '" + args[2] + "' as it doesn't exist.");
+                            }
                             break;
+
+                        case "savearena":
+
+
+
+                            Optional<Arena> arena = KyberPractice.arenaDataManager.getArenas().stream()
+                                    .filter(arenas -> arenas.getName().equals(args[2]))
+                                    .findFirst();
+                            if (arena.isPresent()) {
+                                KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' has been saved.");
+                                ArenaSubCommand.saveSchematic(arena.get(), player);
+                            }else {
+                                KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' couldn't  be saved.");
+                                player.sendMessage("§bDuels §8» §cCouldn't save the arena '" + args[2] + "' as it doesn't exist.");
+                            }
+                            break;
+
+
+
                     }
                 }
             } else if (args[0].equalsIgnoreCase("kit")) {

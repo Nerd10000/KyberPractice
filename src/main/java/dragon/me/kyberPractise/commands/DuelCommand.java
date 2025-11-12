@@ -1,6 +1,6 @@
 package dragon.me.kyberPractise.commands;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.commands.subcommands.DuelSubCommand;
 import dragon.me.kyberPractise.managers.InviteManager;
 import dragon.me.kyberPractise.managers.objects.Invite;
@@ -51,7 +51,7 @@ public class DuelCommand implements CommandExecutor {
                     return true;
                 }
 
-                Optional<Kit> optionalKit = KyberPractise.kitDataManager.getKits().stream()
+                Optional<Kit> optionalKit = KyberPractice.kitDataManager.getKits().stream()
                         .filter(k -> k.getName().equalsIgnoreCase(args[1]))
                         .findFirst();
 

@@ -1,10 +1,9 @@
 package dragon.me.kyberPractise.listener;
 
-import dragon.me.kyberPractise.KyberPractise;
+import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.events.DuelStartEvent;
 import dragon.me.kyberPractise.storage.Arena;
 import dragon.me.kyberPractise.storage.Kit;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ public class DuelStartListener implements Listener {
         String kitName = event.getKit();
         String map = event.getMap();
 
-        Optional<Kit> kitOptional = KyberPractise.kitDataManager.getKits().stream()
+        Optional<Kit> kitOptional = KyberPractice.kitDataManager.getKits().stream()
                 .filter(it -> it.getName().equalsIgnoreCase(kitName))
                 .findFirst();
 
@@ -45,7 +44,7 @@ public class DuelStartListener implements Listener {
         player2.getInventory().setContents(kit.getInventory());
         player2.getInventory().setItemInOffHand(kit.getOffhand());
 
-        Optional<Arena> arenaOptional = KyberPractise.arenaDataManager.getArenas().stream()
+        Optional<Arena> arenaOptional = KyberPractice.arenaDataManager.getArenas().stream()
                 .filter(it -> it.getName().equals(map))
                 .findFirst();
 
@@ -93,6 +92,6 @@ public class DuelStartListener implements Listener {
                 }
                 count--;
             }
-        }.runTaskTimer(KyberPractise.instance, 0L, 20L);
+        }.runTaskTimer(KyberPractice.instance, 0L, 20L);
     }
 }

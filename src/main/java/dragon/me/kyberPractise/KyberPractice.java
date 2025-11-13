@@ -4,6 +4,7 @@ import com.sk89q.worldedit.WorldEdit;
 import dragon.me.kyberPractise.commands.DuelCommand;
 import dragon.me.kyberPractise.commands.KyberRootCommand;
 import dragon.me.kyberPractise.hooks.SqliteHook;
+import dragon.me.kyberPractise.listener.DuelEndListener;
 import dragon.me.kyberPractise.listener.DuelStartListener;
 import dragon.me.kyberPractise.listener.DuelWinListener;
 import dragon.me.kyberPractise.listener.PlayerDeathListener;
@@ -33,6 +34,8 @@ public class KyberPractice extends JavaPlugin {
             KyberPractice.getInstance().getLogger().info("[API HOOKS] WorldEdit/FAWE is installed, enjoy the features!");
         }
 
+
+
         getCommand("duel").setExecutor(new DuelCommand());
         getCommand("kpractise").setExecutor(new KyberRootCommand());
         Bukkit.getLogger().info("Trying to connect to database...Hold on please!");
@@ -42,6 +45,8 @@ public class KyberPractice extends JavaPlugin {
         arenaDataManager = new ArenaDataManager();
         arenaDataManager.loadData();
         kitDataManager = new KitDataManager();
+        arenaDataManager.getArenas().stream().forEach(arena ->
+                KyberPractice.instance.getLogger().info("[DataSaver] Loaded arena '" + arena.getName() + "' from arena.yml"));
 
         registerListeners();
         autoDetectKits();
@@ -60,6 +65,7 @@ public class KyberPractice extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DuelStartListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new DuelWinListener(), this);
+        getServer().getPluginManager().registerEvents(new DuelEndListener(), this);
     }
 
     public static ArenaDataManager getArenaDataManager() {

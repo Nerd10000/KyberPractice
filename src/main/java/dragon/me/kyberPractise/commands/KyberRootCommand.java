@@ -25,13 +25,14 @@ public class KyberRootCommand implements CommandExecutor {
                         "§3§lKyber§b§lPractise §fHelp\n" +
                                 " §b/kyberpractise arena §3§lArguments\n" +
                                 "   §b/kyberpractise arena create §3<arena name> §7Creates a new arena.\n" +
-                                "   §b/kyberpractise arena pos1 §3<arena name> §7Sets the first position of the arena.\n" +
-                                "   §b/kyberpractise arena pos2 §3<arena name> §7Sets the second position of the arena.\n" +
-                                "   §b/kyberpractise arena spawnPos1 §3<arena name> §7Sets the 1st spawn point of an arena.\n" +
+                                "   §b/kyberpractise arena pos1 §3<arena name> §7Sets the first position of the arena region.\n" +
+                                "   §b/kyberpractise arena pos2 §3<arena name> §7Sets the second position of the arena region.\n" +
                                 "   §b/kyberpractise arena spawnPos2 §3<arena name> §7Sets the 2nd spawn point of an arena.\n" +
                                 "   §b/kyberpractise arena spectatorPos §3<arena name> §7Sets the spectator position of an arena.\n" +
                                 "   §b/kyberpractise arena delete §3<arena name> §7Deletes an arena.\n" +
                                 "   §b/kyberpractise arena teleport §3<arena name> §7Teleports you to the arena.\n" +
+                                "   §b/kyberpractise arena savearena §3<arena name> §7Saves the arena as a schematic.\n" +
+                                "   §b/kyberpractise arena restorearena §3<arena name> §7Restores the arena from its schematic.\n" +
                                 " \n" +
                                 " §b/kyberpractise kit §3§lArguments\n" +
                                 "   §7§lComing soon!ிகளில்"
@@ -65,14 +66,15 @@ public class KyberRootCommand implements CommandExecutor {
                             break;
 
                         case "restorearena":
-                            Optional<Arena> arena2 = KyberPractice.arenaDataManager.getArenas().stream()
-                                    .filter(arena3 -> arena3.getName().equals(args[2]))
-                                    .findFirst();
-                            if (arena2.isPresent()) {
-                                KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' couldn't be restored.");
-                                ArenaSubCommand.restoreArena(arena2.get(),player);
-                            }else {
-                                player.sendMessage("§bDuels §8» §cCouldn't restore the arena '" + args[2] + "' as it doesn't exist.");
+                            if (args.length > 2) {
+                                Optional<Arena> arenaOptional = KyberPractice.arenaDataManager.getArenas().stream()
+                                        .filter(a -> a.getName().equalsIgnoreCase(args[2]))
+                                        .findFirst();
+                                if (arenaOptional.isPresent()) {
+                                    ArenaSubCommand.restoreArena(arenaOptional.get(), player);
+                                } else {
+                                    player.sendMessage("§bDuels §8» §cCouldn't restore the arena '" + args[2] + "' as it doesn't exist.");
+                                }
                             }
                             break;
 
@@ -80,12 +82,12 @@ public class KyberRootCommand implements CommandExecutor {
 
 
 
-                            Optional<Arena> arena = KyberPractice.arenaDataManager.getArenas().stream()
-                                    .filter(arenas -> arenas.getName().equals(args[2]))
+                            Optional<Arena> arenas = KyberPractice.arenaDataManager.getArenas().stream()
+                                    .filter(arenas2 -> arenas2.getName().equals(args[2]))
                                     .findFirst();
-                            if (arena.isPresent()) {
+                            if (arenas.isPresent()) {
                                 KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' has been saved.");
-                                ArenaSubCommand.saveSchematic(arena.get(), player);
+                                ArenaSubCommand.saveSchematic(arenas.get(), player);
                             }else {
                                 KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' couldn't  be saved.");
                                 player.sendMessage("§bDuels §8» §cCouldn't save the arena '" + args[2] + "' as it doesn't exist.");

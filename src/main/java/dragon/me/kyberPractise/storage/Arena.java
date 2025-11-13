@@ -29,6 +29,7 @@ public class Arena {
         return name;
     }
 
+
     public Location getPos1() {
         return pos1;
     }

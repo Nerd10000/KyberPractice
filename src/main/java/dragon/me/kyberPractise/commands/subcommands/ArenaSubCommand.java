@@ -140,10 +140,7 @@ public final class ArenaSubCommand {
         player.sendMessage("§bDuels §8» §bThe arena '" + arena.getName() + "' has been saved as a schematic now it will be restored in the world if possible.");
     }
     public static  void restoreArena(Arena arena, Player player){
-        WorldEditHook.pasteSchematic(
-                WorldEditHook.getMidPoint(arena.getPos1(), arena.getPos2()),
-                arena.getName()
-        );
+        WorldEditHook.pasteSchematic(null, arena.getName());
         player.sendMessage("§bDuels §8» §bRestored the arena '" + arena.getName() + "' in the world.");
     }
 }

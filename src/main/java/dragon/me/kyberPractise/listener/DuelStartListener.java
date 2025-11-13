@@ -2,6 +2,7 @@ package dragon.me.kyberPractise.listener;
 
 import dragon.me.kyberPractise.KyberPractice;
 import dragon.me.kyberPractise.events.DuelStartEvent;
+import dragon.me.kyberPractise.hooks.WorldEditHook;
 import dragon.me.kyberPractise.storage.Arena;
 import dragon.me.kyberPractise.storage.Kit;
 import org.bukkit.GameMode;
@@ -54,6 +55,8 @@ public class DuelStartListener implements Listener {
             return;
         }
         Arena arena = arenaOptional.get();
+
+        WorldEditHook.pasteSchematic(arena.getSpawnPos1(), arena.getName());
 
         if (arena.getSpawnPos1() != null) {
             player1.teleport(arena.getSpawnPos1());

@@ -39,4 +39,7 @@ public class DuelEndEvent extends Event {
     public @NotNull HandlerList getHandlers() {
         return handlerList;
     }
+    public static @NotNull HandlerList getHandlerList() {
+        return handlerList;
+    }
 }

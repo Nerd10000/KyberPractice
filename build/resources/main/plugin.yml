@@ -1,6 +1,6 @@
 name: KyberPractice
 version: '1.0-SNAPSHOT'
-main: dragon.me.kyberPractise.KyberPractice
+main: dragon.me.kyberPractice.KyberPractice
 api-version: '1.21'
 
 prefix: "KyberPractice"

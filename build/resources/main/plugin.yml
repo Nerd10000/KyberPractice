@@ -8,6 +8,7 @@ softdepend:
   - WorldEdit
   - FastAsyncWorldEdit
   - Vulcan
+  - PlaceholderAPI
 commands:
   duel:
     description: "Send/accepts/declines a duel request..."

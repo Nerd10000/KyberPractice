@@ -3,6 +3,7 @@ package dragon.me.kyberPractice.listener;
 import dragon.me.kyberPractice.KyberPractice;
 import dragon.me.kyberPractice.events.DuelEndEvent;
 import dragon.me.kyberPractice.events.DuelWinEvent;
+import dragon.me.kyberPractice.hooks.SqliteHook;
 import dragon.me.kyberPractice.managers.GameSessionManager;
 import dragon.me.kyberPractice.managers.objects.Session;
 import org.bukkit.Bukkit;
@@ -47,7 +48,7 @@ public class PlayerDeathListener implements Listener {
         Bukkit.getPluginManager().callEvent(new DuelEndEvent(player,killer, killer.getName(), session));
 
         GameSessionManager.removeGameSession(session);
-
+        SqliteHook.incrementLosses(player.getUniqueId().toString(), session.getKit() != null ? session.getKit() : "unknown");
         // Schedule immediate respawn (1 tick later)
         Bukkit.getScheduler().runTaskLater(KyberPractice.instance, () -> {
             player.spigot().respawn();

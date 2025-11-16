@@ -3,6 +3,7 @@ package dragon.me.kyberPractice;
 import com.sk89q.worldedit.WorldEdit;
 import dragon.me.kyberPractice.commands.DuelCommand;
 import dragon.me.kyberPractice.commands.KyberRootCommand;
+import dragon.me.kyberPractice.hooks.PlaceholderApiHook;
 import dragon.me.kyberPractice.hooks.SqliteHook;
 import dragon.me.kyberPractice.listener.*;
 import dragon.me.kyberPractice.listener.optionals.VulcanPunishEventListener;
@@ -57,6 +58,7 @@ public class KyberPractice extends JavaPlugin {
 
         registerListeners();
         autoDetectKits();
+        PlaceholderApiHook.registerHook();
     }
 
     @Override
@@ -74,6 +76,7 @@ public class KyberPractice extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DuelWinListener(), this);
         getServer().getPluginManager().registerEvents(new DuelEndListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractEvent(),this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(),this);
         //Optional integrations [Vulcan]
         if (KyberPractice.instance.getServer().getPluginManager().isPluginEnabled("Vulcan")){
             getServer().getPluginManager().registerEvents(new VulcanPunishEventListener(),this);

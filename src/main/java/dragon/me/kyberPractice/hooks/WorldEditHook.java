@@ -21,6 +21,7 @@ import dragon.me.kyberPractice.KyberPractice;
 import dragon.me.kyberPractice.storage.Arena;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,58 +60,69 @@ public class WorldEditHook {
             throw new RuntimeException(e);
         }
     }
-    public static void pasteSchematic(Location location, String filename) {
-        Arena arena = KyberPractice.arenaDataManager.getArena(filename);
+    public static void pasteSchematic(Location location, String filename, Runnable callback) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                Arena arena = KyberPractice.arenaDataManager.getArena(filename);
 
-        if (arena == null) {
-            KyberPractice.instance.getLogger().warning("Failed to paste schematic, arena not found!");
-            return;
-        }
-
-
-        if (arena.getPos1() == null || arena.getPos2() == null) {
-            KyberPractice.instance.getLogger().warning("Cannot paste schematic, arena region not defined for '" + filename + "'.");
-            return;
-        }
-
-        // Create a region to find the actual minimum point, which is our paste location
-        Region region = new CuboidRegion(BukkitAdapter.asBlockVector(arena.getPos1()), BukkitAdapter.asBlockVector(arena.getPos2()));
-        Location pasteLocation = BukkitAdapter.adapt(arena.getPos1().getWorld(), region.getMinimumPoint());
+                if (arena == null) {
+                    KyberPractice.instance.getLogger().warning("Failed to paste schematic, arena not found!");
+                    return;
+                }
 
 
-        File schematicFile = new File(KyberPractice.instance.getDataFolder(), "schematics/" + filename + ".schem");
-        KyberPractice.instance.getLogger().info("Attempting to paste schematic from: " + schematicFile.getAbsolutePath());
+                if (arena.getPos1() == null || arena.getPos2() == null) {
+                    KyberPractice.instance.getLogger().warning("Cannot paste schematic, arena region not defined for '" + filename + "'.");
+                    return;
+                }
 
-        if (!schematicFile.exists()) {
-            KyberPractice.instance.getLogger().warning("Schematic file not found at the specified path!");
-            return;
-        }
+                // Create a region to find the actual minimum point, which is our paste location
+                Region region = new CuboidRegion(BukkitAdapter.asBlockVector(arena.getPos1()), BukkitAdapter.asBlockVector(arena.getPos2()));
+                Location pasteLocation = BukkitAdapter.adapt(arena.getPos1().getWorld(), region.getMinimumPoint());
 
-        ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
-        if (format == null) {
-            KyberPractice.instance.getLogger().warning("Failed to determine clipboard format for the schematic. Is it a valid schematic file?");
-            return;
-        }
-        KyberPractice.instance.getLogger().info("Successfully found schematic format: " + format.toString());
 
-        try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(pasteLocation.getWorld()))) {
-            try (ClipboardReader reader = format.getReader(new FileInputStream(schematicFile))) {
-                Clipboard schematic = reader.read();
-                ClipboardHolder clipboardHolder = new ClipboardHolder(schematic);
-                Transform transform = new AffineTransform().translate(schematic.getOrigin().toVector3().multiply(-1));
-                clipboardHolder.setTransform(transform);
-                Operation operation = clipboardHolder
-                        .createPaste(editSession)
-                        .to(BukkitAdapter.asBlockVector(pasteLocation))
-                        .ignoreAirBlocks(false)
-                        .build();
-                Operations.complete(operation);
-                KyberPractice.instance.getLogger().info("Successfully pasted schematic '" + filename + "' at " + pasteLocation.toVector());
-            } catch (IOException | WorldEditException e) {
-                KyberPractice.instance.getLogger().severe("An error occurred while reading or pasting the schematic: " + e.getMessage());
-                e.printStackTrace();
+                File schematicFile = new File(KyberPractice.instance.getDataFolder(), "schematics/" + filename + ".schem");
+                KyberPractice.instance.getLogger().info("Attempting to paste schematic from: " + schematicFile.getAbsolutePath());
+
+                if (!schematicFile.exists()) {
+                    KyberPractice.instance.getLogger().warning("Schematic file not found at the specified path!");
+                    return;
+                }
+
+                ClipboardFormat format = ClipboardFormats.findByFile(schematicFile);
+                if (format == null) {
+                    KyberPractice.instance.getLogger().warning("Failed to determine clipboard format for the schematic. Is it a valid schematic file?");
+                    return;
+                }
+                KyberPractice.instance.getLogger().info("Successfully found schematic format: " + format.toString());
+
+                try (EditSession editSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(pasteLocation.getWorld()))) {
+                    try (ClipboardReader reader = format.getReader(new FileInputStream(schematicFile))) {
+                        Clipboard schematic = reader.read();
+                        ClipboardHolder clipboardHolder = new ClipboardHolder(schematic);
+                        Transform transform = new AffineTransform().translate(schematic.getOrigin().toVector3().multiply(-1));
+                        clipboardHolder.setTransform(transform);
+                        Operation operation = clipboardHolder
+                                .createPaste(editSession)
+                                .to(BukkitAdapter.asBlockVector(pasteLocation))
+                                .ignoreAirBlocks(false)
+                                .build();
+                        Operations.complete(operation);
+                        KyberPractice.instance.getLogger().info("Successfully pasted schematic '" + filename + "' at " + pasteLocation.toVector());
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                callback.run();
+                            }
+                        }.runTask(KyberPractice.instance);
+                    } catch (IOException | WorldEditException e) {
+                        KyberPractice.instance.getLogger().severe("An error occurred while reading or pasting the schematic: " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
+        }.runTaskAsynchronously(KyberPractice.instance);
     }
 
     private static EditSession createSelection(World world){

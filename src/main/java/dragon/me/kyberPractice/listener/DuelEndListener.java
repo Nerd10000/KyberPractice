@@ -22,11 +22,15 @@ public class DuelEndListener implements Listener {
             // Pasting the schematic if able to
             WorldEditHook.pasteSchematic(
                     WorldEditHook.getMidPoint(arena.getPos1(), arena.getPos2()),
-                    arena.getName()
+                    arena.getName(),
+                    () -> {
+                        KyberPractice.instance.getLogger().info("The arena '" + arena.getName() + "' has been restored in the world");
+                        event.getSession().setState(GameState.ENDED);
+                    }
             );
-            KyberPractice.instance.getLogger().info("The arena '" + arena.getName() + "' has been restored in the world");
-            event.getSession().setState(GameState.ENDED);
 
+        } else {
+            event.getSession().setState(GameState.ENDED);
         }
     }
 }

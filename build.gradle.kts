@@ -16,6 +16,9 @@ repositories {
     maven("https://maven.enginehub.org/repo/") {
         name = "enginehub-repo"
     }
+    maven("https://repo.extendedclip.com/releases/")
+
+
 }
 
 sourceSets {
@@ -37,6 +40,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.51.0.0")
     implementation("org.fusesource.jansi:jansi:2.4.2")
     compileOnly(files("libs/VulcanAPI.jar"))
+    compileOnly("me.clip:placeholderapi:2.11.7")
 
 }
 

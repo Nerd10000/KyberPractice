@@ -56,46 +56,46 @@ public class DuelStartListener implements Listener {
         }
         Arena arena = arenaOptional.get();
 
-        WorldEditHook.pasteSchematic(arena.getSpawnPos1(), arena.getName());
-
-        if (arena.getSpawnPos1() != null) {
-            player1.teleport(arena.getSpawnPos1());
-        }
-        if (arena.getSpawnPos2() != null) {
-            player2.teleport(arena.getSpawnPos2());
-        }
-        player1.setGameMode(GameMode.SURVIVAL);
-        player2.setGameMode(GameMode.SURVIVAL);
-        Session session = GameSessionManager.getGameSession(player1);
-        new BukkitRunnable() {
-            int count = 3;
-
-            @Override
-            public void run() {
-                switch (count) {
-                    case 3:
-                        player1.sendTitle("§f§l3", "", 0, 20, 0);
-                        player2.sendTitle("§f§l3", "", 0, 20, 0);
-                        break;
-                    case 2:
-                        player1.sendTitle("§7§l2", "", 0, 20, 0);
-                        player2.sendTitle("§7§l2", "", 0, 20, 0);
-                        break;
-                    case 1:
-                        player1.sendTitle("§b§l1", "", 0, 20, 0);
-                        player2.sendTitle("§b§l1", "", 0, 20, 0);
-                        break;
-                    case 0:
-                        player1.sendTitle("§3§lGO", "", 0, 20, 0);
-                        player2.sendTitle("§3§lGO", "", 0, 20, 0);
-                        player1.playSound(player1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
-                        player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
-                        cancel();
-                        session.setState(GameState.FIGHTING);
-                        break;
-                }
-                count--;
+        WorldEditHook.pasteSchematic(arena.getSpawnPos1(), arena.getName(), () -> {
+            if (arena.getSpawnPos1() != null) {
+                player1.teleport(arena.getSpawnPos1());
             }
-        }.runTaskTimer(KyberPractice.instance, 0L, 20L);
+            if (arena.getSpawnPos2() != null) {
+                player2.teleport(arena.getSpawnPos2());
+            }
+            player1.setGameMode(GameMode.SURVIVAL);
+            player2.setGameMode(GameMode.SURVIVAL);
+            Session session = GameSessionManager.getGameSession(player1);
+            new BukkitRunnable() {
+                int count = 3;
+
+                @Override
+                public void run() {
+                    switch (count) {
+                        case 3:
+                            player1.sendTitle("§f§l3", "", 0, 20, 0);
+                            player2.sendTitle("§f§l3", "", 0, 20, 0);
+                            break;
+                        case 2:
+                            player1.sendTitle("§7§l2", "", 0, 20, 0);
+                            player2.sendTitle("§7§l2", "", 0, 20, 0);
+                            break;
+                        case 1:
+                            player1.sendTitle("§b§l1", "", 0, 20, 0);
+                            player2.sendTitle("§b§l1", "", 0, 20, 0);
+                            break;
+                        case 0:
+                            player1.sendTitle("§3§lGO", "", 0, 20, 0);
+                            player2.sendTitle("§3§lGO", "", 0, 20, 0);
+                            player1.playSound(player1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                            player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
+                            cancel();
+                            session.setState(GameState.FIGHTING);
+                            break;
+                    }
+                    count--;
+                }
+            }.runTaskTimer(KyberPractice.instance, 0L, 20L);
+        });
     }
 }

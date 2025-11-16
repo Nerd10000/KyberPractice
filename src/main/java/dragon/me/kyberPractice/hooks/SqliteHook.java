@@ -1,6 +1,8 @@
 package dragon.me.kyberPractice.hooks;
 
 import dragon.me.kyberPractice.KyberPractice;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.sql.Connection;
@@ -165,6 +167,24 @@ public final class SqliteHook {
             ex.printStackTrace();
         }
         return stats;
+    }
+    public static int getGlobalWins(OfflinePlayer player) {
+        String uuid = player.getUniqueId().toString();
+        String query = "SELECT SUM(wins) AS total_wins FROM kit_stats WHERE player_uuid = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, uuid);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("total_wins");
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return 0; // default if none found
     }
 
     public static class Pair<A, B> {

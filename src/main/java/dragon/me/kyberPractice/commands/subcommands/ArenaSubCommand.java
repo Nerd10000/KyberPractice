@@ -125,9 +125,8 @@ public final class ArenaSubCommand {
         player.sendMessage("§bDuels §8» §bThe arena '" + arena.getName() + "' has been saved as a schematic now it will be restored in the world if possible.");
     }
     public static  void restoreArena(Arena arena, Player player){
-        Bukkit.getScheduler().runTaskAsynchronously(KyberPractice.instance, () -> {
-            WorldEditHook.pasteSchematic(null, arena.getName());
+        WorldEditHook.pasteSchematic(null, arena.getName(), () -> {
+            player.sendMessage("§bDuels §8» §bRestored the arena '" + arena.getName() + "' in the world.");
         });
-        player.sendMessage("§bDuels §8» §bRestored the arena '" + arena.getName() + "' in the world.");
     }
 }

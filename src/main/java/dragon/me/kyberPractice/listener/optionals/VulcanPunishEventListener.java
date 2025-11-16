@@ -1,6 +1,7 @@
 package dragon.me.kyberPractice.listener.optionals;
 
 import dragon.me.kyberPractice.KyberPractice;
+import dragon.me.kyberPractice.events.DuelEndEvent;
 import dragon.me.kyberPractice.managers.GameSessionManager;
 import dragon.me.kyberPractice.managers.objects.Session;
 import me.frep.vulcan.api.event.VulcanPunishEvent;
@@ -23,23 +24,21 @@ public class VulcanPunishEventListener implements Listener {
         Player requester = Bukkit.getPlayer(session.getRequester());
         Player target = Bukkit.getPlayer(session.getTarget());
 
-        // If either player is offline, end session and stop
+
         if (requester == null || target == null) {
             GameSessionManager.removeGameSession(session);
             return;
         }
 
-        // Get lobby spawn safely
         Location lobby = KyberPractice.instance.getConfig().getLocation("lobby-location");
         if (lobby == null) {
             Bukkit.getLogger().severe("[KyberPractice] ERROR: 'lobby-location' missing from config.yml!");
             return;
         }
 
-        // Determine the clean player
+
         Player clean = (punished.equals(target) ? requester : target);
 
-        // Send messages
         clean.sendTitle("§4§lMATCH WAS CANCELED", "");
         clean.sendMessage("""
             
@@ -47,13 +46,16 @@ public class VulcanPunishEventListener implements Listener {
             §cThe match has been cancelled because the other participant was punished by the anticheat.
             §cRemember: §ncheating is a punishable offense on this server§r§c!
             
+            
             """);
 
-        // Teleport BOTH players
+
         requester.teleportAsync(lobby);
         target.teleportAsync(lobby);
 
-        // Remove the duel session
+        requester.getInventory().clear();
+        target.getInventory().clear();
+        Bukkit.getPluginManager().callEvent(new DuelEndEvent(punished,clean, "-", session));
         GameSessionManager.removeGameSession(session);
     }
 }

@@ -4,16 +4,17 @@ import com.sk89q.worldedit.WorldEdit;
 import dragon.me.kyberPractice.commands.DuelCommand;
 import dragon.me.kyberPractice.commands.KyberRootCommand;
 import dragon.me.kyberPractice.hooks.SqliteHook;
-import dragon.me.kyberPractice.listener.DuelEndListener;
-import dragon.me.kyberPractice.listener.DuelStartListener;
-import dragon.me.kyberPractice.listener.DuelWinListener;
-import dragon.me.kyberPractice.listener.PlayerDeathListener;
+import dragon.me.kyberPractice.listener.*;
+import dragon.me.kyberPractice.listener.optionals.VulcanPunishEventListener;
 import dragon.me.kyberPractice.scheduler.RequestTimeoutScheduler;
 import dragon.me.kyberPractice.storage.ArenaDataManager;
 import dragon.me.kyberPractice.storage.KitDataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.fusesource.jansi.AnsiConsole;
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
 
 public class KyberPractice extends JavaPlugin {
 
@@ -28,12 +29,16 @@ public class KyberPractice extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+
         instance = this;
         isWorldEditAvailable = getServer().getPluginManager().isPluginEnabled("WorldEdit") || getServer().getPluginManager().isPluginEnabled("FastAsyncWorldEdit");
 
+        AnsiConsole.systemInstall();
+        //KyberPractice.instance.getLogger().info();
+        KyberPractice.instance.getLogger().info(CYAN +"[APIs]" + GREEN +"[ApiForeLoadEvent]" + WHITE + "Installing ANSI extension for console logging...");
         if (isWorldEditAvailable) {
             worldEdit = WorldEdit.getInstance();
-            KyberPractice.getInstance().getLogger().info("[API HOOKS] WorldEdit/FAWE is installed, enjoy the features!");
+            KyberPractice.getInstance().getLogger().info("[APIs] [ApiHookEvent] WorldEdit/FAWE is installed, enjoy the features!");
         }
 
 
@@ -68,6 +73,12 @@ public class KyberPractice extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new DuelWinListener(), this);
         getServer().getPluginManager().registerEvents(new DuelEndListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractEvent(),this);
+        //Optional integrations [Vulcan]
+        if (KyberPractice.instance.getServer().getPluginManager().isPluginEnabled("Vulcan")){
+            getServer().getPluginManager().registerEvents(new VulcanPunishEventListener(),this);
+            KyberPractice.instance.getLogger().info("[APIs] [ApiHookEvent] Vulcan is installed, enjoy the features!");
+        }
     }
 
     public static ArenaDataManager getArenaDataManager() {

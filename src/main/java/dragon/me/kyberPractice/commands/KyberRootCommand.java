@@ -106,6 +106,12 @@ public class KyberRootCommand implements CommandExecutor {
                             break;
                     }
                 }
+            } else if (args[0].equalsIgnoreCase("reload")) {
+                //TODO Implement it!
+            } else if (args[0].equalsIgnoreCase("setlobby")) {
+                player.sendMessage("§bDuels §8» §bThe lobby has been set to your current location. §3(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")");
+                KyberPractice.instance.getConfig().set("lobby-location", player.getLocation());
+                KyberPractice.instance.saveConfig();
             }
         }
 

@@ -3,6 +3,9 @@ package dragon.me.kyberPractice.listener;
 import dragon.me.kyberPractice.KyberPractice;
 import dragon.me.kyberPractice.events.DuelStartEvent;
 import dragon.me.kyberPractice.hooks.WorldEditHook;
+import dragon.me.kyberPractice.managers.GameSessionManager;
+import dragon.me.kyberPractice.managers.objects.Session;
+import dragon.me.kyberPractice.managers.objects.enums.GameState;
 import dragon.me.kyberPractice.storage.Arena;
 import dragon.me.kyberPractice.storage.Kit;
 import org.bukkit.GameMode;
@@ -63,7 +66,7 @@ public class DuelStartListener implements Listener {
         }
         player1.setGameMode(GameMode.SURVIVAL);
         player2.setGameMode(GameMode.SURVIVAL);
-
+        Session session = GameSessionManager.getGameSession(player1);
         new BukkitRunnable() {
             int count = 3;
 
@@ -88,6 +91,7 @@ public class DuelStartListener implements Listener {
                         player1.playSound(player1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                         player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                         cancel();
+                        session.setState(GameState.FIGHTING);
                         break;
                 }
                 count--;

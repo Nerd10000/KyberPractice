@@ -2,6 +2,7 @@ package dragon.me.kyberPractice.managers;
 
 import dragon.me.kyberPractice.KyberPractice;
 import dragon.me.kyberPractice.managers.objects.Session;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +43,13 @@ public final class GameSessionManager {
             return null;
         }
         return availableArenas.get(random.nextInt(availableArenas.size()));
+    }
+    public static Session getGameSession(Player player) {
+        for (Session s : gameSessions) {
+            if (s.getTarget().equalsIgnoreCase(player.getName()) || s.getRequester().equalsIgnoreCase(player.getName())) {
+                return s;
+            }
+        }
+        return null;
     }
 }

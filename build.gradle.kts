@@ -35,6 +35,8 @@ dependencies {
     compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.16")
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation("org.xerial:sqlite-jdbc:3.51.0.0")
+    implementation("org.fusesource.jansi:jansi:2.4.2")
+    compileOnly(files("libs/VulcanAPI.jar"))
 
 }
 

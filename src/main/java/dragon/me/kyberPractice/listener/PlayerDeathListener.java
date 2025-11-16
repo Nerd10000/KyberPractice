@@ -6,6 +6,7 @@ import dragon.me.kyberPractice.events.DuelWinEvent;
 import dragon.me.kyberPractice.managers.GameSessionManager;
 import dragon.me.kyberPractice.managers.objects.Session;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,7 +23,7 @@ public class PlayerDeathListener implements Listener {
 
         Player player = event.getEntity();
         Player killer = player.getKiller();
-
+        Location deathLoc = player.getLocation().clone();
         Session session = null;
 
         for (Session s : GameSessionManager.getGameSessions()) {
@@ -49,7 +50,21 @@ public class PlayerDeathListener implements Listener {
 
         // Schedule immediate respawn (1 tick later)
         Bukkit.getScheduler().runTaskLater(KyberPractice.instance, () -> {
-            player.spigot().respawn(); // This respawns the player instantly
+            player.spigot().respawn();
+            Bukkit.getScheduler().runTaskLater(KyberPractice.instance, () -> {
+                player.teleport(deathLoc);
+            }, 1L);
+
         }, 1L);
+
+
+
+
+        Bukkit.getScheduler().runTaskLater(KyberPractice.instance, ()-> {
+
+            killer.teleport(KyberPractice.instance.getConfig().getLocation("lobby-location"));
+            player.teleport(KyberPractice.instance.getConfig().getLocation("lobby-location"));
+
+        },20 * 5);
     }
 }

@@ -1,6 +1,5 @@
-<center> # KyberPractice </center>
+<h1 style="text-align: center;">KyberPractice</h1>
 
-<img src="assets/banner-transparent.png">
-
-
-
+<p align="center">
+    <img src="assets/banner-transparent.png" alt="KyberPractice Banner">
+</p>

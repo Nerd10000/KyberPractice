@@ -1,5 +1,5 @@
 <h1 style="text-align: center;">KyberPractice</h1>
-KyberPractice is a plugin that 
+
   KyberPractice is an advanced dueling plugin for Minecraft, built for competitive practice servers. It enables players to fight in 1v1 duels with fully customizable kits and arenas. Key features include an invitation and 
   party system, a matchmaking queue, and automatic arena regeneration via WorldEdit. The plugin also integrates with PlaceholderAPI to display player statistics and Vulcan to ensure a cheat-free environment. With its      
   robust features and developer-friendly API, KyberPractice is the perfect solution for creating a dynamic PvP community.

@@ -5,10 +5,16 @@ import dragon.me.kyberPractice.commands.subcommands.DuelSubCommand;
 import dragon.me.kyberPractice.managers.InviteManager;
 import dragon.me.kyberPractice.managers.objects.Invite;
 import dragon.me.kyberPractice.storage.Kit;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextReplacementConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DuelCommand implements CommandExecutor {
@@ -21,14 +27,14 @@ public class DuelCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage("§bDuels §8» §7Usage: /duel <player> | accept <player> | decline <player>");
+            player.sendMessage(KyberPractice.messageSupplier.getStringAndSerializeIfPossible("duel.normal-usage",player));
             return true;
         }
 
         switch (args[0].toLowerCase()) {
             case "accept":
                 if (args.length < 2) {
-                    player.sendMessage("§bDuels §8» §cUsage: /duel accept <player>");
+                    player.sendMessage(KyberPractice.messageSupplier.getStringAndSerializeIfPossible("duel.only-accept-usage",player));
                     return true;
                 }
                 DuelSubCommand.acceptDuel(player, args[1]);
@@ -41,19 +47,19 @@ public class DuelCommand implements CommandExecutor {
             default:
                 Player target = player.getServer().getPlayer(args[0]);
                 if (target == null) {
-                    player.sendMessage("§bDuels §8» §cPlayer not found.");
+                    player.sendMessage(KyberPractice.messageSupplier.getStringAndSerializeIfPossible("duel.player-not-found",player));
                     return true;
                 }
 
                 if (args.length < 2) {
-                    player.sendMessage("§bDuels §8» §cUsage: /duel <player> <kit>");
+                    player.sendMessage(KyberPractice.messageSupplier.getStringAndSerializeIfPossible("duel.only-duel-usage",player));
                     return true;
                 }
 
                 Kit kit  = KyberPractice.kitDataManager.getKit(args[1]);
 
                 if (kit == null) {
-                    player.sendMessage("§bDuels §8» §cKit not found.");
+                    player.sendMessage(KyberPractice.messageSupplier.getStringAndSerializeIfPossible("duel.kit-not-found",player));
                     return true;
                 }
 
@@ -61,17 +67,27 @@ public class DuelCommand implements CommandExecutor {
 
                 Invite invite = new Invite(player.getUniqueId(), target.getUniqueId(), System.currentTimeMillis(), kit.getName() != null ? kit.getName() : "UHC");
                 InviteManager.addInvite(invite);
-                player.sendMessage("§bDuels §8» §bYou have sent a duel request to §3" + target.getName() + "§b.");
-                target.sendMessage(
-                        "§b§lDUEL REQUEST\n" +
-                                "\n" +
-                                "§3From §b" + player.getName() + "\n" +
-                                "§3Kit §b§l" + kit.getName() + "\n" +
-                                "\n" +
-                                "§bType §3/duel accept " + player.getName() + " §bto accept.\n" +
-                                "§cOr §4/duel decline " + player.getName() + " §cto decline."
+
+
+                player.sendMessage(
+                        KyberPractice.messageSupplier
+                                .serializeString(KyberPractice.messageSupplier.getRawString("duel.request-sent")
+                                        .replace("{target}", target.getName())
+                                        .replace("{kit}",kit.getName() != null ? kit.getName() : "unknown")
+                                        .replace("{challenger}",player.getName()), player)
+
                 );
-                break;
+                List<String> placeholderedString = new ArrayList<>();
+                for (String i : KyberPractice.messageSupplier.getRawStringList("duel.request-notification")){
+                placeholderedString.add(i
+                        .replace("{target}", target.getName())
+                        .replace("{kit}",kit.getName() != null ? kit.getName() : "unknown")
+                        .replace("{challenger}",player.getName()));
+                }
+
+                for (String i : placeholderedString){
+                    target.sendMessage(KyberPractice.messageSupplier.serializeString(i, player));
+                }
         }
 
         return true;

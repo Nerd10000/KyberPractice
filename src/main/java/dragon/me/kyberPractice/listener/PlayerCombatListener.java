@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class PlayerInteractEvent implements Listener {
+public class PlayerCombatListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(EntityDamageByEntityEvent event) {

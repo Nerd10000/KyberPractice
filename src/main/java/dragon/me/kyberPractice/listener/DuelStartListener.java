@@ -8,6 +8,8 @@ import dragon.me.kyberPractice.managers.objects.Session;
 import dragon.me.kyberPractice.managers.objects.enums.GameState;
 import dragon.me.kyberPractice.storage.Arena;
 import dragon.me.kyberPractice.storage.Kit;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -25,6 +27,8 @@ public class DuelStartListener implements Listener {
         Player player2 = event.getPlayer2();
         String kitName = event.getKit();
         String map = event.getMap();
+
+
 
         Kit kit = KyberPractice.kitDataManager.getKit(kitName);
 
@@ -73,20 +77,37 @@ public class DuelStartListener implements Listener {
                 public void run() {
                     switch (count) {
                         case 3:
-                            player1.sendTitle("§f§l3", "", 0, 20, 0);
-                            player2.sendTitle("§f§l3", "", 0, 20, 0);
+                            player1.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.3",player1),Component.text("")
+                            ));
+
+                            player2.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.3",player2),Component.text("")
+                            ));
                             break;
                         case 2:
-                            player1.sendTitle("§7§l2", "", 0, 20, 0);
-                            player2.sendTitle("§7§l2", "", 0, 20, 0);
+                            player1.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.2",player1),Component.text("")
+                            ));
+                            player2.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.2",player2),Component.text("")
+                            ));
                             break;
                         case 1:
-                            player1.sendTitle("§b§l1", "", 0, 20, 0);
-                            player2.sendTitle("§b§l1", "", 0, 20, 0);
+                            player1.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.1",player1),Component.text("")
+                            ));
+                            player2.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.1",player2),Component.text("")
+                            ));
                             break;
                         case 0:
-                            player1.sendTitle("§3§lGO", "", 0, 20, 0);
-                            player2.sendTitle("§3§lGO", "", 0, 20, 0);
+                            player1.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.GO",player1),Component.text("")
+                            ));
+                            player2.showTitle(Title.title(
+                                    KyberPractice.messageSupplier.getStringAndSerializeIfPossible("win.cooldown.GO",player2),Component.text("")
+                            ));
                             player1.playSound(player1.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                             player2.playSound(player2.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f);
                             cancel();

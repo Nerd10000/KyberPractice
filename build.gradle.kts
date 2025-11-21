@@ -41,6 +41,8 @@ dependencies {
     implementation("org.fusesource.jansi:jansi:2.4.2")
     compileOnly(files("libs/VulcanAPI.jar"))
     compileOnly("me.clip:placeholderapi:2.11.7")
+    implementation("net.kyori:adventure-text-minimessage:4.25.0")
+
 
 }
 

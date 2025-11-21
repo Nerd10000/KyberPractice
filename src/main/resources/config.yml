@@ -1,5 +1,21 @@
 
+##############
+# SCHEDULERS #
+##############
+
+#These values are in TICKS
+scheduler:
+  invulnerable-time-after-duels: 5
+  invulnerable-time-before-starting: 5
+  expire-manager-frequency: 20
+
+############
+# SETTINGS #
+############
+
+broadcast-results: true # Makes it broadcast the result of the duel by disabling this no notifications will be given to anyone.
 
 
 lobby-location:
+
 

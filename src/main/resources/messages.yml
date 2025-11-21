@@ -1,0 +1,45 @@
+
+
+duel-request-received:
+  -
+duel-request-expired: ""
+no-permission: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <red>You don't have the permission(s) for this!</red>"
+result-message: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <dark_aqua><aqua>{killer}</aqua> was eliminated by <aqua>{player}</aqua> in a duel.</dark_aqua>"
+# ##########
+# COMMANDS #
+# ##########
+
+duel:
+  request-sent: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <dark_aqua>The duel request has been sent to <aqua>{target}</aqua></dark_aqua>"
+  normal-usage: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <dark_aqua>Wrong syntax! <aqua>/duel [name | accept | decline] (player-name) [kit]</aqua></dark_aqua>"
+  only-accept-usage: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <dark_aqua>Wrong syntax! <aqua>/duel accept [name]</aqua></dark_aqua>"
+  player-not-found: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <red>Player not found!</red>"
+  only-duel-usage: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <dark_aqua>Wrong syntax! <aqua>/duel [name] [kit]</aqua></dark_aqua>"
+  kit-not-found: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <red>Kit not found!</red>"
+  duel-request-send: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b>  <aqua>You have sent a <u>duel request</u> to <dark_aqua>{target}</dark_aqua>.</aqua>"
+  request-notification:
+    - "<dark_gray><st>------------------------------</st></dark_gray>"
+    - "<aqua><b>DUEL REQUEST!</b></aqua>"
+    - "<dark_aqua>You have been challenged by <aqua>{challenger}</aqua> </dark_aqua>"
+    - "<dark_aqua>Using the <aqua>{kit}</aqua> kit.</dark_aqua>"
+    - "<dark_aqua>Choose to <green><b><click:run_command:'/duel accept {challenger}'>[ACCEPT]</click></b></green> or <b><red><click:run_command:'/duel decline {challenger}'>[DECLINE]</click></red></b>.</dark_aqua>"
+    - "<dark_gray><st>------------------------------</st></dark_gray>"
+
+reload:
+  response: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <dark_aqua>The plugin was reloaded under <aqua>{time}</aqua> ms.</dark_aqua>"
+
+
+
+#############
+### EVENTS ##
+#############
+
+win:
+  title: "<b><gold>YOU'VE WON!</gold></b>"
+  cooldown:
+    3: "<dark_aqua><b>3</b></dark_aqua>"
+    2: "<b><color:#46a8aa>2</color></b>"
+    1: "<color:#96f1ff><b>1</b></color>"
+    GO: "<aqua><b>GO!</b></aqua>"
+lose:
+  title: "<b><red>YOU LOST!</red></b>"

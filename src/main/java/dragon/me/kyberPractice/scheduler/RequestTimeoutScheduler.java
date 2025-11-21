@@ -19,11 +19,11 @@ public final class RequestTimeoutScheduler {
                 long delta = System.currentTimeMillis() - invite.getTimestamp();
 
                 if (delta >= 120_000) { // 120 seconds
-                    Player sender = Bukkit.getPlayer(invite.getPlayer());
+                    Player sender = Bukkit.getPlayer(invite.getChallenger());
                     Player target = Bukkit.getPlayer(invite.getTarget());
 
                     // Remove invite
-                    InviteManager.timeoutRequest(invite.getPlayer(), invite.getTarget());
+                    InviteManager.timeoutRequest(invite.getChallenger(), invite.getTarget());
 
                     if (target != null) {
                         target.sendMessage(

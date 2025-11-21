@@ -1,6 +1,8 @@
 package dragon.me.kyberPractice.hooks;
 
 import dragon.me.kyberPractice.KyberPractice;
+import dragon.me.kyberPractice.managers.InviteManager;
+import dragon.me.kyberPractice.managers.objects.Invite;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -32,10 +34,31 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
             int wins = SqliteHook.getGlobalWins(player);
             return wins + "";
         }else if (params.startsWith("wins:")) {
-            String name = params.split(":",2)[1];
+            String name = params.split(":", 2)[1];
             OfflinePlayer target = Bukkit.getPlayer(name);
 
             return target == null ? "0" : SqliteHook.getGlobalWins(target) + "";
+
+        }else if (params.startsWith("duel_invites:")){
+            String[] tags = params.split(":");
+            OfflinePlayer target = Bukkit.getPlayer(tags[1]);
+            Invite invite = InviteManager.getInviteByPlayer(player.getUniqueId());
+
+            switch (tags[2].toLowerCase()){
+                case  "challenger":
+                    return Bukkit.getPlayer(invite.getTarget()).getName();
+
+                case "target":
+                    return player.getName();
+                case  "kit":
+                    return invite.getKit();
+                case  "time":
+                    return invite.getTimestamp() + "";
+                default:
+                    return null;
+
+        }
+
 
         }else {
             return null;

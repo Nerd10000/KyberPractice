@@ -8,8 +8,6 @@ import dragon.me.kyberPractice.storage.Arena;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Optional;
-
 public class DuelEndListener implements Listener {
 
     @EventHandler
@@ -26,11 +24,14 @@ public class DuelEndListener implements Listener {
                     () -> {
                         KyberPractice.instance.getLogger().info("The arena '" + arena.getName() + "' has been restored in the world");
                         event.getSession().setState(GameState.ENDED);
+
                     }
             );
 
         } else {
             event.getSession().setState(GameState.ENDED);
         }
+        KyberPractice.inventoryManager.restorePlayerInventory(event.getPlayer1().getUniqueId());
+        KyberPractice.inventoryManager.restorePlayerInventory(event.getPlayer2().getUniqueId());
     }
 }

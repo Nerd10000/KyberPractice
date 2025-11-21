@@ -1,5 +1,6 @@
 package dragon.me.kyberPractice.commands.subcommands;
 
+import dragon.me.kyberPractice.KyberPractice;
 import dragon.me.kyberPractice.events.DuelStartEvent;
 import dragon.me.kyberPractice.managers.GameSessionManager;
 import dragon.me.kyberPractice.managers.InviteManager;
@@ -20,7 +21,7 @@ public final class DuelSubCommand {
         }
 
         Invite invite = InviteManager.getInviteByPlayer(player.getUniqueId());
-        if (invite == null || !invite.getPlayer().equals(requester.getUniqueId())) {
+        if (invite == null || !invite.getChallenger().equals(requester.getUniqueId())) {
             player.sendMessage("§bDuels §8» §cYou don't have any pending duel requests from §4'" + requester.getName() + "'§c.");
             return;
         }
@@ -35,6 +36,11 @@ public final class DuelSubCommand {
         GameSessionManager.addGameSession(
                 new Session(requester.getName(), player.getName(), randomMap, invite.getKit() != null ? invite.getKit() : "UHC")
         );
+
+        // Save original inventories BEFORE the duel start event applies kits
+        KyberPractice.inventoryManager.addInventory(player.getUniqueId(), player.getInventory());
+        KyberPractice.inventoryManager.addInventory(requester.getUniqueId(), requester.getInventory());
+
         Bukkit.getPluginManager().callEvent(new DuelStartEvent(requester, player, invite.getKit() != null ? invite.getKit() : "UHC", randomMap));
 
         requester.sendMessage("§bDuels §8» §3" + player.getName() + " §baccepted your duel! Starting...");

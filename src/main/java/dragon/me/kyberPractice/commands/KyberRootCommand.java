@@ -22,6 +22,10 @@ public class KyberRootCommand implements CommandExecutor {
 
 
             if (args.length == 0 || args[0].equalsIgnoreCase("?") || args[0].equalsIgnoreCase("help")) {
+                if (!player.hasPermission("kyberpractice.cmds.help")) {
+                    KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                    return false;
+                }
                 player.sendMessage(
                         "§3§lKyber§b§lPractise §fHelp\n" +
                                 " §b/kyberpractise arena §3§lArguments\n" +
@@ -42,31 +46,67 @@ public class KyberRootCommand implements CommandExecutor {
                 if (args.length > 1) {
                     switch (args[1].toLowerCase()) {
                         case "create":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.create")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.create(player, args[2]);
                             break;
                         case "pos1":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.pos1")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.setPos1(player, player.getLocation(), args[2]);
                             break;
                         case "pos2":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.pos2")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.setPos2(player, player.getLocation(), args[2]);
                             break;
                         case "spawnpos1":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.spawnpos1")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.setSpawnPos1(player, player.getLocation(), args[2]);
                             break;
                         case "spawnpos2":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.spawnpos2")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.setSpawnPos2(player, player.getLocation(), args[2]);
                             break;
                         case "spectatorpos":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.spactatorpos")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.setSpectatorPos(player, player.getLocation(), args[2]);
                             break;
                         case "delete":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.delete")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.delete(player, args[2]);
                             break;
                         case "teleport":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.teleport")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) ArenaSubCommand.teleport(player, args[2]);
                             break;
 
                         case "restorearena":
+                            if (!player.hasPermission("kyberpractice.cmds.arena.restorearena")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) {
                                 Arena arena = KyberPractice.arenaDataManager.getArena(args[2]);
 
@@ -79,7 +119,10 @@ public class KyberRootCommand implements CommandExecutor {
                             break;
 
                         case "savearena":
-
+                            if (!player.hasPermission("kyberpractice.cmds.arena.savearena")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             Arena arena = KyberPractice.arenaDataManager.getArena(args[2]);
 
                             if (arena != null) {
@@ -96,22 +139,51 @@ public class KyberRootCommand implements CommandExecutor {
                     }
                 }
             } else if (args[0].equalsIgnoreCase("kit")) {
+                if (!player.hasPermission("kyberpractice.cmds.kit")) {
+                    KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                    return false;
+                }
                 if (args.length > 1) {
                     switch (args[1].toLowerCase()) {
                         case "create":
+                            if (!player.hasPermission("kyberpractice.cmds.kit.create")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) KitSubCommand.create(player, args[2]);
                             break;
                         case "load":
+                            if (!player.hasPermission("kyberpractice.cmds.kit.load")) {
+                                KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                                return false;
+                            }
                             if (args.length > 2) KitSubCommand.loadKit(player, args[2]);
                             break;
                     }
                 }
             } else if (args[0].equalsIgnoreCase("reload")) {
-                //TODO Implement it!
+                if (!player.hasPermission("kyberpractice.cmds.reload")) {
+                    KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                    return false;
+                }
+                long start = System.currentTimeMillis();
+                KyberPractice.messageSupplier.reloadConfig();
+                KyberPractice.instance.reloadConfig();
+                player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                        KyberPractice.messageSupplier.getRawString("reload.response")
+                                .replace("{time}", (System.currentTimeMillis() - start)+""),
+                        player
+                ));
+
             } else if (args[0].equalsIgnoreCase("setlobby")) {
+                if (!player.hasPermission("kyberpractice.cmds.setlobby")) {
+                    KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
+                    return false;
+                }
                 player.sendMessage("§bDuels §8» §bThe lobby has been set to your current location. §3(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")");
                 KyberPractice.instance.getConfig().set("lobby-location", player.getLocation());
                 KyberPractice.instance.saveConfig();
+
             }
         }
 

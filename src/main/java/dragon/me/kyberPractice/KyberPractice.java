@@ -7,14 +7,16 @@ import dragon.me.kyberPractice.hooks.PlaceholderApiHook;
 import dragon.me.kyberPractice.hooks.SqliteHook;
 import dragon.me.kyberPractice.listener.*;
 import dragon.me.kyberPractice.listener.optionals.VulcanPunishEventListener;
+import dragon.me.kyberPractice.managers.ConfigMessageManager;
 import dragon.me.kyberPractice.scheduler.RequestTimeoutScheduler;
 import dragon.me.kyberPractice.storage.ArenaDataManager;
+import dragon.me.kyberPractice.storage.InventoryManager;
 import dragon.me.kyberPractice.storage.KitDataManager;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.fusesource.jansi.AnsiConsole;
-import static org.fusesource.jansi.Ansi.*;
+
 import static org.fusesource.jansi.Ansi.Color.*;
 
 public class KyberPractice extends JavaPlugin {
@@ -24,7 +26,9 @@ public class KyberPractice extends JavaPlugin {
     public static KitDataManager kitDataManager;
     public static boolean isWorldEditAvailable;
     public static WorldEdit worldEdit;
-
+    public static MiniMessage miniMessage = MiniMessage.miniMessage();
+    public static ConfigMessageManager messageSupplier;
+    public static InventoryManager inventoryManager = new InventoryManager();
 
 
     @Override
@@ -34,8 +38,6 @@ public class KyberPractice extends JavaPlugin {
         instance = this;
         isWorldEditAvailable = getServer().getPluginManager().isPluginEnabled("WorldEdit") || getServer().getPluginManager().isPluginEnabled("FastAsyncWorldEdit");
 
-        AnsiConsole.systemInstall();
-        //KyberPractice.instance.getLogger().info();
         KyberPractice.instance.getLogger().info(CYAN +"[APIs]" + GREEN +"[ApiForeLoadEvent]" + WHITE + "Installing ANSI extension for console logging...");
         if (isWorldEditAvailable) {
             worldEdit = WorldEdit.getInstance();
@@ -48,6 +50,8 @@ public class KyberPractice extends JavaPlugin {
         getCommand("kpractise").setExecutor(new KyberRootCommand());
         Bukkit.getLogger().info("Trying to connect to database...Hold on please!");
         SqliteHook.setupDatabase();
+
+        messageSupplier = new ConfigMessageManager(this);
 
         RequestTimeoutScheduler.startScheduler();
         arenaDataManager = new ArenaDataManager();
@@ -75,7 +79,7 @@ public class KyberPractice extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
         getServer().getPluginManager().registerEvents(new DuelWinListener(), this);
         getServer().getPluginManager().registerEvents(new DuelEndListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteractEvent(),this);
+        getServer().getPluginManager().registerEvents(new PlayerCombatListener(),this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(),this);
         //Optional integrations [Vulcan]
         if (KyberPractice.instance.getServer().getPluginManager().isPluginEnabled("Vulcan")){

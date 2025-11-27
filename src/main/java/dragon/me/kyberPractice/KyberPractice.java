@@ -3,15 +3,18 @@ package dragon.me.kyberPractice;
 import com.sk89q.worldedit.WorldEdit;
 import dragon.me.kyberPractice.commands.DuelCommand;
 import dragon.me.kyberPractice.commands.KyberRootCommand;
+import dragon.me.kyberPractice.commands.QueueCommand;
 import dragon.me.kyberPractice.hooks.PlaceholderApiHook;
 import dragon.me.kyberPractice.hooks.SqliteHook;
 import dragon.me.kyberPractice.listener.*;
 import dragon.me.kyberPractice.listener.optionals.VulcanPunishEventListener;
 import dragon.me.kyberPractice.managers.ConfigMessageManager;
+import dragon.me.kyberPractice.scheduler.QueueScheduler;
 import dragon.me.kyberPractice.scheduler.RequestTimeoutScheduler;
 import dragon.me.kyberPractice.storage.ArenaDataManager;
 import dragon.me.kyberPractice.storage.InventoryManager;
 import dragon.me.kyberPractice.storage.KitDataManager;
+import dragon.me.kyberPractice.storage.QueueDataManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -29,6 +32,7 @@ public class KyberPractice extends JavaPlugin {
     public static MiniMessage miniMessage = MiniMessage.miniMessage();
     public static ConfigMessageManager messageSupplier;
     public static InventoryManager inventoryManager = new InventoryManager();
+    public static QueueDataManager queueDataManager;
 
 
     @Override
@@ -46,8 +50,19 @@ public class KyberPractice extends JavaPlugin {
 
 
 
-        getCommand("duel").setExecutor(new DuelCommand());
-        getCommand("kpractise").setExecutor(new KyberRootCommand());
+        DuelCommand duelCommand = new DuelCommand();
+        KyberRootCommand rootCommand = new KyberRootCommand();
+        QueueCommand queueCommand = new QueueCommand();
+
+        getCommand("duel").setExecutor(duelCommand);
+        getCommand("duel").setTabCompleter(duelCommand);
+
+        getCommand("kpractise").setExecutor(rootCommand);
+        getCommand("kpractise").setTabCompleter(rootCommand);
+
+        getCommand("queue").setExecutor(queueCommand);
+        getCommand("queue").setTabCompleter(queueCommand);
+
         Bukkit.getLogger().info("Trying to connect to database...Hold on please!");
         SqliteHook.setupDatabase();
 
@@ -59,10 +74,12 @@ public class KyberPractice extends JavaPlugin {
         kitDataManager = new KitDataManager();
         arenaDataManager.getArenas().stream().forEach(arena ->
                 KyberPractice.instance.getLogger().info("[DataSaver] Loaded arena '" + arena.getName() + "' from arena.yml"));
-
+        queueDataManager =  new QueueDataManager();
+        queueDataManager.loadData();
         registerListeners();
         autoDetectKits();
         PlaceholderApiHook.registerHook();
+        QueueScheduler.startScheduler();
     }
 
     @Override

@@ -2,9 +2,10 @@
 
 duel-request-received:
   -
-duel-request-expired: ""
+duel-request-expired: "<dark_aqua>The duel request of</dark_aqua> <aqua>{sender}</aqua> <dark_aqua>has expired.</dark_aqua>"
 no-permission: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <red>You don't have the permission(s) for this!</red>"
 result-message: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <dark_aqua><aqua>{killer}</aqua> was eliminated by <aqua>{player}</aqua> in a duel.</dark_aqua>"
+
 # ##########
 # COMMANDS #
 # ##########
@@ -24,11 +25,90 @@ duel:
     - "<dark_aqua>Using the <aqua>{kit}</aqua> kit.</dark_aqua>"
     - "<dark_aqua>Choose to <green><b><click:run_command:'/duel accept {challenger}'>[ACCEPT]</click></b></green> or <b><red><click:run_command:'/duel decline {challenger}'>[DECLINE]</click></red></b>.</dark_aqua>"
     - "<dark_gray><st>------------------------------</st></dark_gray>"
-
+  kit-not-found-by-name: "<red>Kit</red> <dark_red>'{kit}'</dark_red> <red>not found!</red>"
+  map-not-found: "<red>Arena</red> <dark_red>'{map}'</dark_red> <red>not found!</red>"
 reload:
   response: "<b><aqua><dark_aqua>Kyber</dark_aqua>Duels</aqua></b>  <b><dark_gray>|</dark_gray> </b> <dark_aqua>The plugin was reloaded under <aqua>{time}</aqua> ms.</dark_aqua>"
 
+help:
+    - "<aqua><b>KyberPractice Help</b></aqua>"
+    - " <aqua>/kpractise arena</aqua> <dark_aqua><b>Arguments</b></dark_aqua>"
+    - "   <aqua>/kpractise arena create</aqua> <dark_aqua>[arena-name] - Creates a new arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena pos1</aqua> <dark_aqua>[arena-name] - Sets the first position of the arena region.</dark_aqua>"
+    - "   <aqua>/kpractise arena pos2</aqua> <dark_aqua>[arena-name] - Sets the second position of the arena region.</dark_aqua>"
+    - "   <aqua>/kpractise arena spawnpos1</aqua> <dark_aqua>[arena-name] - Sets the 1st spawn point of an arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena spawnpos2</aqua> <dark_aqua>[arena-name] - Sets the 2nd spawn point of an arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena spectatorpos</aqua> <dark_aqua>[arena-name] - Sets the spectator position of an arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena delete</aqua> <dark_aqua>[arena-name] - Deletes an arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena teleport</aqua> <dark_aqua>[arena-name] - Teleports you to the arena.</dark_aqua>"
+    - "   <aqua>/kpractise arena savearena</aqua> <dark_aqua>[arena-name] - Saves the arena as a schematic.</dark_aqua>"
+    - "   <aqua>/kpractise arena restorearena</aqua> <dark_aqua>[arena-name] - Restores the arena from its schematic.</dark_aqua>"
+    - ""
+    - " <aqua>/kpractise kit</aqua> <dark_aqua><b>Arguments</b></dark_aqua>"
+    - "   <aqua>/kpractise kit create</aqua> <dark_aqua>[kit-name] - Creates a new kit from your current inventory.</dark_aqua>"
+    - "   <aqua>/kpractise kit load</aqua> <dark_aqua>[kit-name] - Gives you the specified kit.</dark_aqua>"
+    - ""
+    - " <aqua>/kpractise reload</aqua> <dark_aqua>- Reloads plugin and messages configuration.</dark_aqua>"
+    - " <aqua>/kpractise setlobby</aqua> <dark_aqua>- Sets the lobby location to your current position.</dark_aqua>"
+    - " <aqua>/kpractise help</aqua> <dark_aqua>- Shows this help menu.</dark_aqua>"
+    - ""
+    - " <gray>Other commands:</gray>"
+    - "   <aqua>/duel</aqua> <dark_aqua>[player | accept | decline] (player) [kit] - Send or manage duel requests.</dark_aqua>"
+    - "   <aqua>/queue</aqua> <dark_aqua>create [queue-name] [kit] | join [queue-name] - Manage matchmaking queues.</dark_aqua>"
 
+
+# -------- Additional configurable messages --------
+# Arena messages
+arena:
+  create: "<aqua>Arena</aqua> <dark_aqua>'{arena}'</dark_aqua> <green>created.</green>"
+  not-exist: "<red>Arena</red> <dark_red>'{arena}'</dark_red> <red>does not exist.</red>"
+  delete: "<aqua>Arena</aqua> <dark_aqua>'{arena}'</dark_aqua> <red>deleted.</red>"
+  pos1:
+    set: "<dark_aqua>Set <aqua>pos1</aqua> of '<aqua>{arena}</aqua>' to <aqua>{xyz}</aqua>"
+  pos2:
+    set: "<dark_aqua>Set <aqua>pos2</aqua> of '<aqua>{arena}</aqua>' to <aqua>{xyz}</aqua>"
+  spawn1:
+    set: "<dark_aqua>Set <aqua>spawn #1</aqua> of '<aqua>{arena}</aqua>' to <aqua>{xyz}</aqua>"
+  spawn2:
+    set: "<dark_aqua>Set <aqua>spawn #2</aqua> of '<aqua>{arena}</aqua>' to <aqua>{xyz}</aqua>"
+  spectator:
+    set: "<dark_aqua>Set <aqua>spectator</aqua> of '<aqua>{arena}</aqua>' to <aqua>{xyz}</aqua>"
+  save:
+    success: "<green>Saved arena</green> <aqua>{arena}</aqua> <green>as a schematic.</green>"
+    not-exist: "<red>Couldn't save arena</red> <dark_red>'{arena}'</dark_red> <red>because it doesn't exist.</red>"
+  restore:
+    success: "<green>Restored arena</green> <aqua>{arena}</aqua> <green>in the world.</green>"
+    not-exist: "<red>Couldn't restore arena</red> <dark_red>'{arena}'</dark_red> <red>because it doesn't exist.</red>"
+
+# Root command
+root:
+  setlobby: "<aqua>Lobby set to</aqua> <dark_aqua>({x}, {y}, {z})</dark_aqua>"
+
+# Accept/duel flow helpers
+accept:
+  offline-target: "<red>Player</red> <dark_red>{name}</dark_red> <red>is not online.</red>"
+  no-pending: "<red>You don't have any pending duel requests from</red> <dark_red>{requester}</dark_red><red>.</red>"
+  arenas-full:
+    requester: "<red>{player} accepted the duel, but all arenas are full. Try later!</red>"
+    player: "<red>All arenas are full right now, try again later.</red>"
+  notify:
+    requester: "<aqua>{player}</aqua> <dark_aqua>accepted your duel! Starting on</dark_aqua> <aqua>{map}</aqua><dark_aqua>...</dark_aqua>"
+    player: "<dark_aqua>Duel starting against</dark_aqua> <aqua>{requester}</aqua> <dark_aqua>on</dark_aqua> <aqua>{map}</aqua><dark_aqua>!</dark_aqua>"
+
+
+
+
+# Queue messages
+queue:
+  create:
+    usage: "<dark_aqua>Usage:</dark_aqua> <aqua>/queue create</aqua> <dark_aqua>[queue-name] [kit]</dark_aqua>"
+    kit-not-found: "<red>Kit not found!</red>"
+    success: "<green>Created queue</green> <aqua>{queue}</aqua> <dark_aqua>for kit</dark_aqua> <aqua>{kit}</aqua>"
+  join:
+    success: "<dark_aqua>You joined queue</dark_aqua> <aqua>{queue}</aqua>"
+    not-found: "<red>Queue not found!</red>"
+    title: "<aqua><b>Joined Queue</b></aqua>"
+    subtitle: "<dark_aqua>{players}</dark_aqua>"
 
 #############
 ### EVENTS ##
@@ -43,3 +123,28 @@ win:
     GO: "<aqua><b>GO!</b></aqua>"
 lose:
   title: "<b><red>YOU LOST!</red></b>"
+
+
+
+
+# Quit/Cancel messages
+quit:
+  cancel:
+    title: "<red><b>MATCH CANCELED</b></red>"
+    message:
+      - ""
+      - "<red><b>MATCH WAS CANCELED!</b></red>"
+      - "<dark_aqua>The match was cancelled because the other participant left the game.</dark_aqua>"
+      - "<dark_aqua>Reminder:</dark_aqua> <red>quitting a duel may be punishable.</red>"
+      - ""
+
+# Punish/Anticheat cancel
+punish:
+  cancel:
+    title: "<red><b>MATCH CANCELED</b></red>"
+    message:
+      - ""
+      - "<red><b>MATCH WAS CANCELED!</b></red>"
+      - "<dark_aqua>The match was cancelled because the other participant was punished by the anticheat.</dark_aqua>"
+      - "<dark_aqua>Reminder:</dark_aqua> <red>cheating is a punishable offense.</red>"
+      - ""

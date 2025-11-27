@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.text.Component;
 
 public class VulcanPunishEventListener implements Listener {
     @EventHandler
@@ -39,16 +41,13 @@ public class VulcanPunishEventListener implements Listener {
 
         Player clean = (punished.equals(target) ? requester : target);
 
-        clean.sendTitle("§4§lMATCH WAS CANCELED", "");
-        clean.sendMessage("""
-            
-            §4§lMATCH WAS CANCELED!
-            §cThe match has been cancelled because the other participant was punished by the anticheat.
-            §cRemember: §ncheating is a punishable offense on this server§r§c!
-            
-            
-            """);
-
+        clean.showTitle(Title.title(
+                KyberPractice.messageSupplier.getStringAndSerializeIfPossible("punish.cancel.title", clean),
+                Component.text("")
+        ));
+        for (String line : KyberPractice.messageSupplier.getRawStringList("punish.cancel.message")) {
+            clean.sendMessage(KyberPractice.messageSupplier.serializeString(line, clean));
+        }
 
         requester.teleportAsync(lobby);
         target.teleportAsync(lobby);

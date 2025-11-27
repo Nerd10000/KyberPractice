@@ -5,13 +5,16 @@ import dragon.me.kyberPractice.commands.subcommands.ArenaSubCommand;
 import dragon.me.kyberPractice.commands.subcommands.KitSubCommand;
 import dragon.me.kyberPractice.storage.Arena;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-
-public class KyberRootCommand implements CommandExecutor {
+public class KyberRootCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -26,22 +29,8 @@ public class KyberRootCommand implements CommandExecutor {
                     KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
                     return false;
                 }
-                player.sendMessage(
-                        "§3§lKyber§b§lPractise §fHelp\n" +
-                                " §b/kyberpractise arena §3§lArguments\n" +
-                                "   §b/kyberpractise arena create §3<arena name> §7Creates a new arena.\n" +
-                                "   §b/kyberpractise arena pos1 §3<arena name> §7Sets the first position of the arena region.\n" +
-                                "   §b/kyberpractise arena pos2 §3<arena name> §7Sets the second position of the arena region.\n" +
-                                "   §b/kyberpractise arena spawnPos2 §3<arena name> §7Sets the 2nd spawn point of an arena.\n" +
-                                "   §b/kyberpractise arena spectatorPos §3<arena name> §7Sets the spectator position of an arena.\n" +
-                                "   §b/kyberpractise arena delete §3<arena name> §7Deletes an arena.\n" +
-                                "   §b/kyberpractise arena teleport §3<arena name> §7Teleports you to the arena.\n" +
-                                "   §b/kyberpractise arena savearena §3<arena name> §7Saves the arena as a schematic.\n" +
-                                "   §b/kyberpractise arena restorearena §3<arena name> §7Restores the arena from its schematic.\n" +
-                                " \n" +
-                                " §b/kyberpractise kit §3§lArguments\n" +
-                                "   §7§lComing soon!"
-                );
+                KyberPractice.messageSupplier.getStringListAndSerializeIfPossible("help", player)
+                        .forEach(player::sendMessage);
             } else if (args[0].equalsIgnoreCase("arena")) {
                 if (args.length > 1) {
                     switch (args[1].toLowerCase()) {
@@ -113,7 +102,10 @@ public class KyberRootCommand implements CommandExecutor {
                                 if (arena != null) {
                                     ArenaSubCommand.restoreArena(arena, player);
                                 } else {
-                                    player.sendMessage("§bDuels §8» §cCouldn't restore the arena '" + args[2] + "' as it doesn't exist.");
+                                    player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                                            KyberPractice.messageSupplier.getRawString("arena.restore.not-exist").replace("{arena}", args[2]),
+                                            player
+                                    ));
                                 }
                             }
                             break;
@@ -130,7 +122,10 @@ public class KyberRootCommand implements CommandExecutor {
                                 ArenaSubCommand.saveSchematic(arena, player);
                             }else {
                                 KyberPractice.instance.getLogger().info("The arena '" + args[2] + "' couldn't  be saved.");
-                                player.sendMessage("§bDuels §8» §cCouldn't save the arena '" + args[2] + "' as it doesn't exist.");
+                                player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                                        KyberPractice.messageSupplier.getRawString("arena.save.not-exist").replace("{arena}", args[2]),
+                                        player
+                                ));
                             }
                             break;
 
@@ -180,7 +175,13 @@ public class KyberRootCommand implements CommandExecutor {
                     KyberPractice.messageSupplier.sendMissingPermissionMessage(player);
                     return false;
                 }
-                player.sendMessage("§bDuels §8» §bThe lobby has been set to your current location. §3(" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + ")");
+                player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                        KyberPractice.messageSupplier.getRawString("root.setlobby").
+                                replace("{x}", String.valueOf(player.getLocation().getBlockX())).
+                                replace("{y}", String.valueOf(player.getLocation().getBlockY())).
+                                replace("{z}", String.valueOf(player.getLocation().getBlockZ())),
+                        player
+                ));
                 KyberPractice.instance.getConfig().set("lobby-location", player.getLocation());
                 KyberPractice.instance.saveConfig();
 
@@ -190,5 +191,75 @@ public class KyberRootCommand implements CommandExecutor {
         // TODO: Handle other arguments here...
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (!(sender instanceof Player)) {
+            return Collections.emptyList();
+        }
+        List<String> suggestions = new ArrayList<>();
+        if (args.length == 1) {
+            suggestions.add("arena");
+            suggestions.add("kit");
+            suggestions.add("reload");
+            suggestions.add("setlobby");
+            suggestions.add("help");
+            suggestions.add("?");
+            return filter(suggestions, args[0]);
+        }
+        if (args.length >= 2) {
+            String sub = args[0].toLowerCase();
+            switch (sub) {
+                case "arena":
+                    if (args.length == 2) {
+                        suggestions.add("create");
+                        suggestions.add("pos1");
+                        suggestions.add("pos2");
+                        suggestions.add("spawnpos1");
+                        suggestions.add("spawnpos2");
+                        suggestions.add("spectatorpos");
+                        suggestions.add("delete");
+                        suggestions.add("teleport");
+                        suggestions.add("restorearena");
+                        suggestions.add("savearena");
+                        return filter(suggestions, args[1]);
+                    } else if (args.length == 3) {
+                        String action = args[1].toLowerCase();
+                        if (!action.equals("create")) {
+                            suggestions.addAll(KyberPractice.arenaDataManager.getArenas().stream()
+                                    .map(a -> a.getName())
+                                    .collect(Collectors.toList()));
+                        }
+                        return filter(suggestions, args[2]);
+                    }
+                    break;
+                case "kit":
+                    if (args.length == 2) {
+                        suggestions.add("create");
+                        suggestions.add("load");
+                        return filter(suggestions, args[1]);
+                    } else if (args.length == 3) {
+                        if (args[1].equalsIgnoreCase("load")) {
+                            suggestions.addAll(KyberPractice.kitDataManager.getKits().stream()
+                                    .map(k -> k.getName())
+                                    .collect(Collectors.toList()));
+                        }
+                        return filter(suggestions, args[2]);
+                    }
+                    break;
+                case "reload":
+                case "setlobby":
+                case "help":
+                case "?":
+                    return Collections.emptyList();
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    private List<String> filter(List<String> source, String prefix) {
+        String p = prefix == null ? "" : prefix.toLowerCase();
+        return source.stream().filter(s -> s != null && s.toLowerCase().startsWith(p)).collect(Collectors.toList());
     }
 }

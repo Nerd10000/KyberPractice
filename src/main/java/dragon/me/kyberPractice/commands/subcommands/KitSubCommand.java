@@ -30,9 +30,15 @@ public final class KitSubCommand {
             player.getInventory().setArmorContents(kit.getArmor());
             player.getInventory().setContents(kit.getInventory());
             player.getInventory().setItem(EquipmentSlot.OFF_HAND, kit.getOffhand());
-            player.sendMessage("Loaded kit: " + name);
+            player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("kit.load.success").replace("{kit}", name),
+                    player
+            ));
         } else {
-            player.sendMessage("Could not find kit: " + name);
+            player.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("kit.load.not-found").replace("{kit}", name),
+                    player
+            ));
         }
     }
 }

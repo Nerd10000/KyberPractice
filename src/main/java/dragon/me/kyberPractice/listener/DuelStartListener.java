@@ -33,8 +33,14 @@ public class DuelStartListener implements Listener {
         Kit kit = KyberPractice.kitDataManager.getKit(kitName);
 
         if (kit == null) {
-            player1.sendMessage("§cKit '" + kitName + "' not found!");
-            player2.sendMessage("§cKit '" + kitName + "' not found!");
+            player1.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("duel.kit-not-found-by-name").replace("{kit}", kitName),
+                    player1
+            ));
+            player2.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("duel.kit-not-found-by-name").replace("{kit}", kitName),
+                    player2
+            ));
             return;
         }
 
@@ -54,8 +60,14 @@ public class DuelStartListener implements Listener {
                 .findFirst();
 
         if (!arenaOptional.isPresent()) {
-            player1.sendMessage("§cArena '" + map + "' not found!");
-            player2.sendMessage("§cArena '" + map + "' not found!");
+            player1.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("duel.map-not-found").replace("{map}", map),
+                    player1
+            ));
+            player2.sendMessage(KyberPractice.messageSupplier.serializeString(
+                    KyberPractice.messageSupplier.getRawString("duel.map-not-found").replace("{map}", map),
+                    player2
+            ));
             return;
         }
         Arena arena = arenaOptional.get();

@@ -1,25 +1,28 @@
-package dragon.me.commands.subcommands;
-
-import javax.naming.PartialResultException;
-import javax.security.auth.callback.PasswordCallback;
+package dragon.me.kyberPractice.commands.subcommands;
 
 import dragon.me.kyberPractice.managers.PartyManager;
+import dragon.me.kyberPractice.managers.objects.Party;
+import org.bukkit.entity.Player;
 
 public final class PartySubCommand {
 
-    public void create(String name,Player creator){
-        //TODO implement logic
+    private PartySubCommand() {}
+
+    public static void create(Player creator, String name) {
+        if (creator == null || name == null) return;
         PartyManager.addParty(name, creator.getUniqueId());
-
-
     }
-    public void disband(String name, Player disbander){
-        if (PartyManager.partyMap.get(name).get(0) == disbander.getUniqueId()){
+
+    public static void disband(Player disbander, String name) {
+        if (disbander == null || name == null) return;
+        Party party = PartyManager.getParty(name);
+        if (party != null && !party.getMembers().isEmpty() && party.getMembers().get(0).equals(disbander.getUniqueId())) {
             PartyManager.removeParty(name);
         }
-
     }
-
+    public static void invite(Player inviter, Player target,String partyName){
+        
+    }
 
 
 }

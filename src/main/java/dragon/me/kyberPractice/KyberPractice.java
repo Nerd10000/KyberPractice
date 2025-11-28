@@ -42,7 +42,7 @@ public class KyberPractice extends JavaPlugin {
         instance = this;
         isWorldEditAvailable = getServer().getPluginManager().isPluginEnabled("WorldEdit") || getServer().getPluginManager().isPluginEnabled("FastAsyncWorldEdit");
 
-        KyberPractice.instance.getLogger().info(CYAN +"[APIs]" + GREEN +"[ApiForeLoadEvent]" + WHITE + "Installing ANSI extension for console logging...");
+        //KyberPractice.instance.getLogger().info(CYAN +"[APIs]" + GREEN +"[ApiForeLoadEvent]" + WHITE + "Installing ANSI extension for console logging...");
         if (isWorldEditAvailable) {
             worldEdit = WorldEdit.getInstance();
             KyberPractice.getInstance().getLogger().info("[APIs] [ApiHookEvent] WorldEdit/FAWE is installed, enjoy the features!");
